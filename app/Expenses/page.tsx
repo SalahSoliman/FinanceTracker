@@ -1,5 +1,14 @@
-import { useState } from "react";
-import { TextField, Button, Container, Typography } from "@mui/material";
+"use client";
+
+import { createContext, useState, useContext } from "react";
+import {
+  TextField,
+  Button,
+  Container,
+  Typography,
+  Grid,
+  Grid2,
+} from "@mui/material";
 
 interface Expense {
   id: number;
@@ -7,10 +16,10 @@ interface Expense {
   date: string;
 }
 interface AddExpenseProps {
-    onAdd: (expense: Expense) => void;
-  }
+  onAdd: (expense: Expense) => void;
+}
 
-export function AddExpense({ onAdd } : AddExpenseProps) {
+export function AddExpense({ onAdd }: AddExpenseProps) {
   const [amount, setAmount] = useState<number | "">("");
   const [date, setDate] = useState<string | "">("");
   const [id, setId] = useState<number | "">("");
@@ -73,9 +82,29 @@ export function AddExpense({ onAdd } : AddExpenseProps) {
           }}
           required
         />
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Submit
-        </Button>
+        <Grid2
+          container
+          spacing={2}
+          justifyContent="center"
+          alignItems="center"
+        >
+          <Grid2 size={6} sx={{ padding: 2 }}>
+            <Button type="submit" variant="contained" color="primary" fullWidth>
+              Submit
+            </Button>
+          </Grid2>
+          <Grid2 size={6}>
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              fullWidth
+              sx={{ bgcolor: "red" }}
+            >
+              Non
+            </Button>
+          </Grid2>
+        </Grid2>
       </form>
     </Container>
   );
@@ -84,9 +113,10 @@ export function AddExpense({ onAdd } : AddExpenseProps) {
 export default function ExpenseList() {
   const [expenses, setExpenses] = useState<Expense[]>([]);
 
-  const addExpense: (expense: Expense) => void = (expense : Expense) => {
+  const addExpense: (expense: Expense) => void = (expense: Expense) => {
     setExpenses([...expenses, expense]);
   };
+
   return (
     <div>
       <AddExpense onAdd={addExpense} />
@@ -99,5 +129,4 @@ export default function ExpenseList() {
       </ul>
     </div>
   );
-  
 }

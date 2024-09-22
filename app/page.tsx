@@ -1,16 +1,11 @@
 "use client";
 // FinanceTracker.js
 import React, { useState } from "react";
-import ExpenseList from "./ExpenseList";
+import ExpenseList from "./Expenses/page";
 import ResponsiveAppBar from "./Appbar";
-import Container from '@mui/material/Container';
+import Container from "@mui/material/Container";
+import { useRouter } from "next/router";
 
 export default function FinanceTracker() {
-
-  return (
-    <Container>
-      <ResponsiveAppBar></ResponsiveAppBar>
-    <ExpenseList></ExpenseList>
-    </Container>
-);
+  return <html></html>;
 }
