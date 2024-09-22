@@ -1,36 +1,103 @@
-import React from 'react';
+import { useState } from "react";
+import { TextField, Button, Container, Typography } from "@mui/material";
 
-
-export interface Expense {
+interface Expense {
+  id: number;
   amount: number;
-  category: string;
   date: string;
-  id: number; // Add an ID property for deletion
 }
+interface AddExpenseProps {
+    onAdd: (expense: Expense) => void;
+  }
 
-function ExpenseItem({ expense, onDelete }: { expense: Expense; onDelete: (id: number) => void }) {
+export function AddExpense({ onAdd } : AddExpenseProps) {
+  const [amount, setAmount] = useState<number | "">("");
+  const [date, setDate] = useState<string | "">("");
+  const [id, setId] = useState<number | "">("");
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+
+    const transaction = {
+      id,
+      amount,
+      date,
+    };
+
+    console.log("Transaction Submitted:", transaction);
+
+    // Reset form
+    setId("");
+    setAmount("");
+    setDate("");
+    const expense: Expense = {
+      id: Math.random(), // Use a unique id
+      amount: Number(amount),
+      date,
+    };
+    onAdd(expense);
+  };
   return (
-    <li>
-      {expense.amount} - {expense.category} - {expense.date}
-      <button onClick={() => onDelete(expense.id)}>Delete</button>
-    </li>
+    <Container maxWidth="sm" sx={{ bgcolor: "white", padding: 2 }}>
+      <form onSubmit={handleSubmit}>
+        <Typography variant="h4" gutterBottom>
+          Transaction Form
+        </Typography>
+        <TextField
+          label="ID"
+          type="number"
+          value={id}
+          onChange={(e) => setId(Number(e.target.value))}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          label="Amount"
+          type="number"
+          value={amount}
+          onChange={(e) => setAmount(Number(e.target.value))}
+          fullWidth
+          margin="normal"
+          required
+        />
+        <TextField
+          label="Date"
+          type="date"
+          value={date}
+          onChange={(e) => setDate(e.target.value)}
+          fullWidth
+          margin="normal"
+          InputLabelProps={{
+            shrink: true,
+          }}
+          required
+        />
+        <Button type="submit" variant="contained" color="primary" fullWidth>
+          Submit
+        </Button>
+      </form>
+    </Container>
   );
 }
 
-interface ExpenseListProps {
-  expenses: Expense[];
-  onDelete: (id: number) => void;
-}
+export default function ExpenseList() {
+  const [expenses, setExpenses] = useState<Expense[]>([]);
 
-export default function ExpenseList({ expenses, onDelete }: ExpenseListProps) {
+  const addExpense: (expense: Expense) => void = (expense : Expense) => {
+    setExpenses([...expenses, expense]);
+  };
   return (
     <div>
-      <h2>Expenses</h2>
+      <AddExpense onAdd={addExpense} />
       <ul>
         {expenses.map((expense) => (
-          <ExpenseItem key={expense.id} expense={expense} onDelete={onDelete} />
+          <li key={expense.id}>
+            {expense.date}: {expense.amount}
+          </li>
         ))}
       </ul>
     </div>
   );
+  
 }
